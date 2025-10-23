@@ -1,0 +1,95 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Navigator Mini Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root { font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; }
+    body { margin: 24px; }
+    header { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    input, button { padding: 8px 10px; font-size: 14px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+    th, td { text-align: left; padding: 10px; border-bottom: 1px solid #eee; }
+    tr:hover { background: #fafafa; }
+    .danger { border: 1px solid #d33; color: #d33; background: #fff; border-radius: 6px; cursor: pointer; }
+    .pill { padding: 2px 8px; border-radius: 999px; background: #eee; font-size: 12px; }
+    .muted { color: #666; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h2 style="margin:0">Agreements</h2>
+    <button id="loginBtn">Login with DocuSign</button>
+    <button id="refresh">Refresh</button>
+    <span class="muted" id="count"></span>
+  </header>
+
+  <table id="grid" aria-label="Agreements">
+    <thead>
+      <tr>
+        <th style="width:28%">Name</th>
+        <th style="width:18%">ID</th>
+        <th style="width:14%">Status</th>
+        <th style="width:20%">Updated</th>
+        <th style="width:20%">Actions</th>
+      </tr>
+    </thead>
+    <tbody id="rows"></tbody>
+  </table>
+
+  <script>
+    const $rows = document.getElementById('rows');
+    const $count = document.getElementById('count');
+    const $refresh = document.getElementById('refresh');
+
+    async function load() {
+      const r = await fetch('/api/getAgreements');
+      const { items = [] } = await r.json();
+      render(items);
+    }
+
+    function render(items) {
+      $rows.innerHTML = '';
+      $count.textContent = items.length + ' shown';
+      for (const a of items) {
+        const tr = document.createElement('tr');
+
+        tr.innerHTML = `
+          <td>${a.name ?? '(no name)'}</td>
+          <td>${a.agreementId ?? ''}</td>
+          <td><span class="pill">${a.status ?? 'unknown'}</span></td>
+          <td>${a.updatedTime ? new Date(a.updatedTime).toLocaleString() : ''}</td>
+          <td>
+            <button class="danger">
+              Delete
+            </button>
+          </td>
+        `;
+
+        const delBtn = tr.querySelector('button.danger');
+        delBtn?.addEventListener('click', async () => {
+          const id = a.agreementId;
+          const typed = prompt('Type YES to confirm deletion:');
+          if ((typed || '').toLowerCase() !== 'yes') return;
+          const r = await fetch('/api/deleteAgreement/' + encodeURIComponent(id), { method: 'DELETE' });
+          const body = await r.json().catch(() => ({}));
+          if (!r.ok) { alert('Delete failed: ' + (body.error || r.statusText)); return; }
+          load();
+        });
+
+        $rows.appendChild(tr);
+      }
+    }
+
+    $refresh.addEventListener('click', load);
+
+    // Login button: redirect to server auth route which uses the IAM SDK
+    document.getElementById('loginBtn')?.addEventListener('click', () => {
+      window.location.href = '/auth/login';
+    });
+    
+    load();
+  </script>
+</body>
+</html>
