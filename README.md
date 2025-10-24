@@ -4,7 +4,7 @@ By the end of this lab you will have:
 
 * [Run the project with mock data (instant feedback).](#run-the-project-with-mock-data)
 
-* [Configured your own DocuSign developer app.]()
+* [Configured your own Docusign developer app.]()
 
 * [Called the Navigator API via SDK.](#get-agreements-using-the-navigator-sdk)
 
