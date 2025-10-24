@@ -4,13 +4,13 @@ By the end of this lab you will have:
 
 * [Run the project with mock data (instant feedback).](#run-the-project-with-mock-data)
 
-* [Configured your own integration key in your Docusign developer account and generated an access token with the AI assistant.]()
+* [Used the Docusign AI assistant to create an IK and generate an access token.]()
 
-* [Called the Navigator API via the SDK to get agreements.](#get-agreements-using-the-navigator-sdk)
+* [Used the IAM SDK to get navigator agreements.](#get-agreements-using-the-navigator-sdk)
 
-* [Extended the project by implementing a delete operation using the Navigator IAM SDKs.](#implement-delete-agreement-your-task)
+* [Used the IAM SDK to delete an agreement.](#implement-delete-agreement-your-task)
 
-* [(Optional) Learned how to implement OAuth.](#add-oauth-optional-advanced)
+* [(Optional) Learned how to implement OAuth with the IAM SDK.](#add-oauth-optional-advanced)
 
 # Run the project with mock data
 
