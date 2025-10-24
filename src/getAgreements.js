@@ -44,7 +44,7 @@ export async function getAgreements({ accessToken } = {}) {
     return {
       items: items.map(a => ({
         agreementId: a.agreementId ?? a.id ?? '',
-        name: a.name ?? a.file_name ?? '',
+        name: a.name ?? a.title ?? '',
         status: a.status ?? 'unknown',
         raw: a
       }))
