@@ -39,7 +39,6 @@ export async function bulkUploadAgreements({ accessToken } = {}) {
         const blobUrls = data._embedded.documents
           .filter(doc => doc._actions && doc._actions.upload_document)
           .map(doc => doc._actions.upload_document);
-        console.log('Upload document URLs:', blobUrls);
 
         // Upload PDF files to each blob URL
         const fs = await import('fs');
@@ -98,8 +97,6 @@ export async function bulkUploadAgreements({ accessToken } = {}) {
       });
 
       const statusC = await statusCheck.json();
-      console.log(statusC);
-      console.log(statusC.status)
 
     return {jobId: jobId, status: statusC.status, received: i};
 
@@ -125,8 +122,6 @@ export async function bulkUploadStatus({ jobId, accessToken } = {}) {
         'Content-Type': 'application/json'
       }
     });
-
-    console.log(statusCheck);
 
     const statusC = await statusCheck.json();
 

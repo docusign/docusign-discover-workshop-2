@@ -20,8 +20,6 @@ export async function getAgreements({ accessToken } = {}) {
       }
     });
 
-    console.log("RESPONSE STATUS:", res.status);
-
     if (!res.ok) {
       const text = await res.text();
       let error;
@@ -35,8 +33,6 @@ export async function getAgreements({ accessToken } = {}) {
     }
 
     const data = await res.json();
-
-    console.log("DATA RECEIVED:", data);
     
     const items = (data?.items ?? data?.data ?? []);
 
