@@ -36,7 +36,7 @@ POST to `https://{{host}}/v1/accounts/{{accountId}}/upload/jobs/{{jobId_int}}/ac
 }
 ```
 
-<!-- This is the same body as in Step 1, but this time the `expected_number_of_docs` value should correspond to the actual number of documents uploaded. -->
+This is the same body as in Step 1, but this time the `expected_number_of_docs` value should correspond to the actual number of documents uploaded.
 
 A successful response provides data about the job, including the status.
 
