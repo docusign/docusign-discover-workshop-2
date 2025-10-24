@@ -22,7 +22,6 @@ function buildAuthUrl({
   if(process.env.DS_ACCESS_TOKEN) {
     return "/ds/callback";
   }
-  
   if (!CLIENT_ID) throw new Error('CLIENT_ID missing');
   return AuthUtils.createAuthorizationUrl({
     type: 'code',
@@ -43,9 +42,17 @@ async function exchangeCodeForToken(code, { redirectUri = REDIRECT_URI } = {}) {
 
   const iam = new IamClient();
   try {
-    // TODO: Implement token exchange via sdk
-
-    return {};
+    const tokenResp = await iam.auth.getTokenFromConfidentialAuthCode(
+      { clientId: CLIENT_ID, secretKey: SECRET_KEY },
+      { code, redirectUri }
+    );
+    
+    return {
+      accessToken: tokenResp.accessToken ?? tokenResp.access_token,
+      refreshToken: tokenResp.refreshToken ?? tokenResp.refresh_token,
+      expiresIn: tokenResp.expiresIn ?? tokenResp.expires_in,
+      raw: tokenResp,
+    };
   } catch (err) {
     const msg = err?.errorDescription ?? err?.error_description ?? err?.message ?? String(err);
     const e = new Error(`Token exchange failed: ${msg}`);
