@@ -5,7 +5,7 @@ import { makeClient } from './client.js';
 // Lists agreements using the Docusign IAM Navigator API directly
 export async function getAgreements({ accessToken } = {}) {
   // if (!accessToken) throw new Error('Access token required');
-  // const accountId = process.env.DS_ACCOUNT_ID;
+  const accountId = process.env.DS_ACCOUNT_ID;
   // if (!accountId) throw new Error('ACCOUNT_ID missing');
 
   const baseUrl = process.env.BASE_URL; 

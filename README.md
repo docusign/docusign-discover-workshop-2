@@ -6,11 +6,11 @@ By the end of this lab you will have:
 
 * [Configured your own DocuSign developer app.]()
 
-* Called the Navigator API via SDK.
+* [Called the Navigator API via SDK.](#get-agreements-using-the-navigator-sdk)
 
-* Extended the project by implementing a delete operation.
+* [Extended the project by implementing a delete operation.](#implement-delete-agreement-your-task)
 
-* (Optional) Learned how to implement OAuth.
+* [(Optional) Learned how to implement OAuth.](#add-oauth-optional-advanced)
 
 # Run the project with mock data
 
@@ -40,16 +40,14 @@ npm run dev
 
 # Create an integration key and obtain an access token using the VSCode Docusign AI Assistant
 
-Follow instructions here
-
-# Get agreements using the Navigator API
-
-1. Open your .env file and update the variable BASE\_PATH to the value [api-d.docusign.com](http://api-d.docusign.com)  
-2. Restart your server and refresh the browser — you should now see **real agreements from your Docusign account**.
+[Follow instructions here](/oauthWithAIAssistant.md)
 
 # Get agreements using the Navigator SDK
 
-The code currently fetches agreements using a REST call (the same one the mock server used).
+* Open your .env file and update the variable BASE\_PATH to the value [api-d.docusign.com](http://api-d.docusign.com)  
+
+The code currently fetches agreements using a REST API call.
+[`getAgreements.js`](./src/getAgreements.js)
 
 Replace this with the equivalent SDK call to Navigator:
 
@@ -57,11 +55,21 @@ Replace this with the equivalent SDK call to Navigator:
 client.navigator.agreements.getAgreementsList({ accountId });
 ```
 
+[API reference](https://developers.docusign.com/docs/navigator-api/reference/navigator/agreements/getagreement/)
+
 Restart your server and refresh the browser — you should now see **real agreements from your Docusign account**.
+
+## Implement agreement filtering (optional/advanced)
+
+You can filter agreements by properties such as status, expiration date, party name, etc. The full list of available query parameters is documented on
+ the [API reference page.](https://developers.docusign.com/docs/navigator-api/reference/navigator/agreements/getagreementslist/)
+
+Try extending your SDK method calls with additional query parameters. Experiment with different combinations to see how you can sort and filter agreements in ways that match the requirements of various use cases.
 
 # Implement “Delete Agreement” (your task)
 
 * In the project there’s a stubbed-out function for **Delete Agreement** using the SDK.
+[`deleteAgreement.js`](./src/deleteAgreement.js)
 
 Your job is to complete that function:
 
@@ -69,9 +77,12 @@ Your job is to complete that function:
 client.navigator.agreements.deleteAgreement({ accountId, agreementId });
 ```
 
+[API reference](https://developers.docusign.com/docs/navigator-api/reference/navigator/agreements/deleteagreement/)
+
 * Test it by deleting one of your agreements.
 
 # Add OAuth (Optional, advanced)
+[Auth examples](https://github.com/docusign/docusign-iam-typescript-client/tree/main/auth-examples)
 
 * Right now you pasted in an access token manually.
 
@@ -83,5 +94,5 @@ client.navigator.agreements.deleteAgreement({ accountId, agreementId });
 
   * **JWT Grant** (server-to-server)
 
-* The project has an `auth.js` file stubbed out for you to implement.
+* The project has an [`auth.js`](./src/auth.js) file stubbed out for you to implement.
 

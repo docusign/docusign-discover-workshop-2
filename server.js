@@ -5,7 +5,8 @@ import session from 'express-session';
 import cookieParser from 'cookie-parser';
 import { getAgreements } from './src/getAgreements.js';
 import { deleteAgreement } from './src/deleteAgreement.js';
-import { buildAuthUrl, exchangeCodeForToken, getUserInfo } from './src/auth.js';
+import { bulkUploadAgreements, bulkUploadStatus } from './src/bulkUploadAgreements.js';
+import { buildAuthUrl, exchangeCodeForToken } from './src/auth.js';
 
 const app = express();
 
@@ -65,6 +66,43 @@ app.delete('/api/deleteAgreement/:agreementId', requireAuth, async (req, res) =>
   }
 });
 
+// Bulk upload agreements 
+app.post('/api/bulkUploadAgreements', requireAuth, express.json(), async (req, res) => {
+  try {
+    const result = await bulkUploadAgreements({
+      accessToken: req.session.accessToken
+    });
+
+    // Save jobId in session for future status checks
+    if (result) {
+      req.session.jobId = result.jobId;
+    }
+
+    res.json(result);
+  } catch (e) {
+    console.error('bulk upload failed', e);
+    res.status(500).json({ error: 'Bulk upload failed' });
+  }
+});
+
+// Bulk upload status endpoint
+app.get('/api/bulkUploadStatus', requireAuth, async (req, res) => {
+  try {
+    const jobId = req.session.jobId;
+    if (!jobId) {
+      return res.status(400).json({ error: 'No bulk upload job found in session' });
+    }
+
+    const status = await bulkUploadStatus({ jobId, accessToken: req.session.accessToken });
+
+    res.json(status);
+  } catch (e) {
+    console.error('bulk upload status check failed', e);
+    res.status(500).json({ error: 'Status check failed' });
+  }
+});
+
+
 // Auth routes
 app.get('/auth/login', (req, res) => {
   try {
@@ -89,7 +127,7 @@ app.get('/ds/callback', async (req, res) => {
 
   try {
     const token = await exchangeCodeForToken(String(code));
-    // Store token in session instead of cookie
+    // Store token in session
     req.session.accessToken = token.accessToken;
     res.redirect('/');
   } catch (e) {

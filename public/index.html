@@ -22,6 +22,8 @@
     <h2 style="margin:0">Agreements</h2>
     <button id="loginBtn">Login with DocuSign</button>
     <button id="refresh">Refresh</button>
+    <button id="bulkUpload">Bulk Upload</button>
+    <button id="checkStatus">Check Status</button>
     <span class="muted" id="count"></span>
   </header>
 
@@ -42,6 +44,7 @@
     const $rows = document.getElementById('rows');
     const $count = document.getElementById('count');
     const $refresh = document.getElementById('refresh');
+    const $bulkUpload = document.getElementById('bulkUpload');
 
     async function load() {
       const r = await fetch('/api/getAgreements');
@@ -83,6 +86,44 @@
     }
 
     $refresh.addEventListener('click', load);
+
+
+    document.getElementById('bulkUpload')?.addEventListener('click', async () => {
+      try {
+        const r = await fetch('/api/bulkUploadAgreements', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+        });
+        
+        const body = await r.json().catch(() => ({}));
+        if (!r.ok) {
+          alert('Bulk upload failed: ' + (body.error || r.statusText));
+          return;
+        }
+        alert('Bulk upload complete: ' + (body.received ?? 0) + ' processed. Status:' + (body.status));
+        load();
+      } catch (err) {
+        alert('Bulk upload error: ' + err.message);
+      }
+    });
+
+    document.getElementById('checkStatus')?.addEventListener('click', async () => {
+      try {
+        const r = await fetch('/api/bulkUploadStatus', {
+          method: 'GET',
+          headers: { 'Accept': 'application/json' }
+        });
+        
+        const body = await r.json().catch(() => ({}));
+        if (!r.ok) {
+          alert('Status check failed: ' + (body.error || r.statusText));
+          return;
+        }
+        alert('Upload Status: ' + (body.status || 'unknown'));
+      } catch (err) {
+        alert('Status check error: ' + err.message);
+      }
+    });
 
     // Login button: redirect to server auth route which uses the IAM SDK
     document.getElementById('loginBtn')?.addEventListener('click', () => {
