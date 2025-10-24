@@ -1,6 +1,3 @@
-// Uploads 2 agreements (in a hard coded folder).
-import { makeClient } from './client.js';
-
 export async function bulkUploadAgreements({ accessToken } = {}) {
  
   console.log(`Bulk uploading agreements`);
