@@ -1,3 +1,4 @@
+// Uploads 2 agreements (in a hard coded folder).
 export async function bulkUploadAgreements({ accessToken } = {}) {
  
   console.log(`Bulk uploading agreements`);
