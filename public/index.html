@@ -100,7 +100,7 @@
           alert('Bulk upload failed: ' + (body.error || r.statusText));
           return;
         }
-        alert('Bulk upload complete: ' + (body.received ?? 0) + ' processed. Status:' + (body.status));
+        alert('Bulk upload complete: ' + (body.received ?? 0) + ' processed.');
         load();
       } catch (err) {
         alert('Bulk upload error: ' + err.message);
