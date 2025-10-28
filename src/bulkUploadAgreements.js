@@ -8,7 +8,7 @@ export async function bulkUploadAgreements({ accessToken } = {}) {
     const body = {
       "job_name": "test_name",
       "expected_number_of_docs": 2,
-      "culture_name": "en_us"
+      "language": "en_us"
     };
     
     const res = await fetch(`${baseUrl}/v1/accounts/${accountId}/upload/jobs`, {
@@ -81,8 +81,7 @@ export async function bulkUploadAgreements({ accessToken } = {}) {
           'Authorization': `Bearer ${accessToken}`,
           'Accept': 'application/json',
           'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(body)
+        }
       });
 
     return {jobId: jobId, received: i};
