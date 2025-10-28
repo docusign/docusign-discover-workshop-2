@@ -12,6 +12,9 @@ By the end of this lab you will have:
 
 * [(Optional) Learned how to implement OAuth with the IAM SDK.](#add-oauth-optional-advanced)
 
+* [Created and tested Connect webhooks for Navigator events.](#create-and-test-connect-webhooks)
+
+
 # Run the project with mock data
 
 1. Clone the [project repo](https://github.com/docusign/docusign-discover-workshop-2) into VS Code.
@@ -96,6 +99,39 @@ client.navigator.agreements.deleteAgreement({ accountId, agreementId });
 
 * The project has an [`auth.js`](./src/auth.js) file stubbed out for you to implement.
 
+# Create and Test Connect Webhooks
+
+1. Visit [https://apps-d.docusign.com/admin/connect/](https://apps-d.docusign.com/admin/connect/).
+
+1. Click **Add Configuration** > **Custom**.
+
+1. In the Name box, type **Navigator API test** or another configuration name of your choosing.
+
+1. In a new tab, open [https://webhook.site](https://webhook.site), then click the generated URL to copy it.
+
+1. Return to your Custom Connect configuration, then in the **URL to Publish** box paste the URL you copied.
+
+1. In the Trigger Events section, open the Navigator list and check all 5 events.
+
+1. Click **Add Configuration**.
+
+1. In a new tab, open [https://apps-d.docusign.com/send/documents](https://apps-d.docusign.com/send/documents), then in the sidebar, click **Completed**.
+
+1. Click an agreement with the icon for AI suggestions (purple star), click **Review All**, approve one of the AI-suggested values, then click **Save**.
+
+1. On the webhook.site tab, review the **agreement-extractions-reviewed** message.
+
+1. In your open agreement, click **Review All**, approve all remaining AI-suggested values, then click **Save**.
+
+1. On the webhook.site tab, review the **agreement-reviews-complete** message.
+
+1. In your open agreement, click the edit icon (pencil), change a data value, then click **Save**.
+
+1. On the webhook.site tab, review the **agreement-updated** message.
+
+1. Return to your open agreement close it, in the agreements list click the vertical ellipsis (**&vellip;**) for the agreement, click **Remove**, then click **Remove Agreement.**
+
+1. On the webhook.site tab, review the **agreement-deleted** message.
 # Connect to the Docusign MCP server
 
 Check out the `discover-mcp-workshop` branch of this repo. You'll need to work in this branch to ensure clean context for the agent you're building.
