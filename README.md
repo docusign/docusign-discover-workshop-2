@@ -96,3 +96,11 @@ client.navigator.agreements.deleteAgreement({ accountId, agreementId });
 
 * The project has an [`auth.js`](./src/auth.js) file stubbed out for you to implement.
 
+# Connect to the Docusign MCP server
+
+Check out the `discover-mcp-workshop` branch of this repo. You'll need to work in this branch to ensure clean context for the agent you're building.
+
+See [Docusign MCP Workshop: AI-Powered Agreement Analysis](https://github.com/docusign/docusign-discover-workshop-2/blob/discover-mcp-workshop/README.md) for your instructions.
+
+
+
