@@ -15,7 +15,7 @@ By the end of this workshop, you'll have:
 - **VS Code** with MCP extension installed
 - **GitHub Copilot** with free or paid plan
 - **Node.js** (v16 or higher) and npm/npx
-- **Docusign Developer Account** (free at [developers.Docusign.com](https://developers.Docusign.com))
+- **Docusign Developer Account** (free at [developers.docusign.com](https://developers.docusign.com))
 - **Basic understanding** of APIs and JSON data
 
 ## Setup Instructions
@@ -65,14 +65,15 @@ By the end of this workshop, you'll have:
         ```json
         {
             "docusign-mcp": {
-			"command": "npx",
-			"args": [
-				"-y",
-				"mcp-remote",
-				"https://services.demo.docusign.net/docusign-mcp-server/v1.0/mcp",
-				"--header",
-				"Authorization:Bearer <YOUR_JWT_TOKEN>" 
-            ]}
+               "command": "npx",
+               "args": [
+                  "-y",
+                  "mcp-remote",
+                  "https://services.demo.docusign.net/docusign-mcp-server/v1.0/mcp",
+                  "--header",
+                  "Authorization:Bearer <YOUR_JWT_TOKEN>" 
+               ]
+            }
         }
         ```
 
@@ -219,7 +220,7 @@ After completing this workshop:
 
 ## Workshop Resources
 
-- **Docusign Developer Center:** [developers.Docusign.com](https://developers.docusign.com)
+- **Docusign Developer Center:** [developers.docusign.com](https://developers.docusign.com)
 - **MCP Documentation:** [modelcontextprotocol.io](https://modelcontextprotocol.io)
-- **Sample Queries:** See `.github/copilot-instructions.md` for code patterns
+- **Sample Prompts:** See `.github/prompts/*.md` for sample prompts to use with Copilot during workshop
 ---
