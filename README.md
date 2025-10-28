@@ -67,7 +67,7 @@ npm run dev
 
 3. The `completeRes` constant uses a `fetch` statement. Add the URL for the [complete job endpoint](./bulkUploadWithAPI.md#bulk-upload-steps) as the first argument.
 
-4. The `bulkUploadStatus` function makes a request to check the status of `jobId`. Complete the `statusCheck` constant with an async fetch statement to the [check status endpoint](./bulkUploadWithAPI.md#check-bulk-upload-status) that includes `Authorization`, `Accept`, and `Content-Type` headers.
+4. The `bulkUploadStatus` function makes a request to check the status of `jobId`. Complete the `statusCheck` constant with a fetch statement to the [check status endpoint](./bulkUploadWithAPI.md#check-bulk-upload-status) that includes `Authorization`, `Accept`, and `Content-Type` headers.
 
 5. Restart your server and refresh the browser — you should now see **real agreements from your Docusign account**.
 
