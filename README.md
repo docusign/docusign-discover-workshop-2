@@ -6,6 +6,8 @@ By the end of this lab you will have:
 
 * [Used the Docusign AI assistant to create an IK and generate an access token.]()
 
+* [Bulk uploaded agreement documents to Navigator using an API call](#bulk-upload-agreements-using-the-navigator-api)
+
 * [Used the IAM SDK to get navigator agreements.](#get-agreements-using-the-navigator-sdk)
 
 * [Used the IAM SDK to delete an agreement.](#implement-delete-agreement-your-task)
@@ -44,6 +46,34 @@ npm run dev
 # Create an integration key and obtain an access token using the VSCode Docusign AI Assistant
 
 [Follow instructions here](/oauthWithAIAssistant.md)
+
+# Bulk upload agreements using the Navigator API
+
+* Open your .env file and update the variable BASE\_PATH to the value [api-d.docusign.com](http://api-d.docusign.com).
+
+## Create bulk upload job
+
+1. The `try` statement includes an empty `body` constant. Add the following as the value of `body`:
+
+```js
+{
+  "job_name": "test_name",
+  "expected_number_of_docs": 2,
+  "language": "en_us"
+};
+```
+
+2. The `res` constant uses a `fetch` statement. Add the URL for the [create job endpoint](./bulkUploadWithAPI.md#bulk-upload-steps) as the first argument.
+
+3. The `completeRes` constant uses a `fetch` statement. Add the URL for the [complete job endpoint](./bulkUploadWithAPI.md#bulk-upload-steps) as the first argument.
+
+4. The `bulkUploadStatus` function makes a request to check the status of `jobId`. Complete the `statusCheck` constant with an async fetch statement to the [check status endpoint](./bulkUploadWithAPI.md#check-bulk-upload-status) that includes `Authorization`, `Accept`, and `Content-Type` headers.
+
+5. Restart your server and refresh the browser — you should now see **real agreements from your Docusign account**.
+
+6. Click the **Bulk Upload** button. You should see a modal confirming successful upload of 2 agreements.
+
+7. Click the **Check Status** button. You should see a modal providing the status of the agreement upload and processing. Status should report complete after about 60 seconds.
 
 # Get agreements using the Navigator SDK
 
