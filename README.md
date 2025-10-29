@@ -57,7 +57,7 @@ npm run dev
 
 1. The `try` statement includes an empty `body` constant. Add the following as the value of `body`:
 
-```js
+```json
 {
   "job_name": "test_name",
   "expected_number_of_docs": 2,
