@@ -56,6 +56,7 @@ export async function bulkUploadAgreements({ accessToken } = {}) {
               method: 'PUT',
               headers: {
                 'x-ms-blob-type': 'BlockBlob',
+                'x-ms-meta-filename': path.basename(pdfPath, '.pdf'),
                 'x-ms-meta-myownprop': 'mytestprop',
                 'Content-Type': 'application/pdf'
               },
