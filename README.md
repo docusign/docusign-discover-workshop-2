@@ -107,6 +107,18 @@ You can filter agreements by properties such as status, expiration date, party n
 
 Try extending your SDK method calls with additional query parameters. Experiment with different combinations to see how you can sort and filter agreements in ways that match the requirements of various use cases.
 
+```javascript
+let options = {
+  accountId: accountId,
+  limit: 10,
+  "effective_date[gte]": "2015-01-01",
+  sort: "effective_date",
+  direction: "asc"
+};
+
+client.navigator.agreements.getAgreementsList( options );
+```
+
 # Implement “Delete Agreement” (your task)
 
 * In the project there’s a stubbed-out function for **Delete Agreement** using the SDK.
