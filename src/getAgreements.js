@@ -37,6 +37,6 @@ export async function getAgreements({ accessToken } = {}) {
     name: a.title ?? a.name ?? a.file_name ?? '',
     raw: a
   }));
-  console.log(`ITEMS: ${JSON.stringify(items)}`);
+  // console.log(`ITEMS: ${JSON.stringify(items)}`);
   return { items };
 }
