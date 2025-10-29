@@ -5,9 +5,45 @@ export async function bulkUploadAgreements({ accessToken } = {}) {
   const accountId = process.env.DS_ACCOUNT_ID;
   const baseUrl = process.env.BASE_URL; 
   try {
+    // Upload files to each blob URL
+    const fs = await import('fs');
+    const path = await import('path');
+    
+    // Automatically read files from demo_agreements folder
+    const demoAgreementsDir = './demo_agreements';
+    
+    // Function to recursively find all files
+    const findFiles = (dir) => {
+      const files = [];
+      const items = fs.readdirSync(dir);
+      
+      for (const item of items) {
+        const fullPath = path.join(dir, item);
+        const stat = fs.statSync(fullPath);
+        
+        if (stat.isDirectory()) {
+          // Recursively search subdirectories
+          files.push(...findFiles(fullPath));
+        } else if (path.extname(item).toLowerCase() === '.docx') {
+          files.push(fullPath);
+        }
+      }
+      
+      return files;
+    };
+
+    const files = findFiles(demoAgreementsDir);
+
+    if (files.length === 0) {
+      console.warn('No files found in demo_agreements folder');
+      return { jobId: jobId, received: 0 };
+    }
+    
+    console.log(`Found ${files.length} files:`, files);
+
     const body = {
       "job_name": "test_name",
-      "expected_number_of_docs": 2,
+      "expected_number_of_docs": files.length,
       "language": "en_us"
     };
     
@@ -38,39 +74,31 @@ export async function bulkUploadAgreements({ accessToken } = {}) {
           .filter(doc => doc._actions && doc._actions.upload_document)
           .map(doc => doc._actions.upload_document);
 
-        // Upload PDF files to each blob URL
-        const fs = await import('fs');
-        const path = await import('path');
-        
-        const pdfFiles = [
-          './demo_agreements/CX/Acme Cloud Services.pdf',
-          './demo_agreements/CX/MSA.pdf'
-        ];
-
-        for (i = 0; i < Math.min(blobUrls.length, pdfFiles.length); i++) {
+        for (i = 0; i < Math.min(blobUrls.length, files.length); i++) {
           const blobUrl = blobUrls[i];
-          const pdfPath = pdfFiles[i];
+          const filePath = files[i];
           
           try {
-            const fileBuffer = fs.readFileSync(pdfPath);
+            const fileBuffer = fs.readFileSync(filePath);
             
             const uploadRes = await fetch(blobUrl, {
               method: 'PUT',
               headers: {
                 'x-ms-blob-type': 'BlockBlob',
+                'x-ms-meta-filename': path.basename(filePath),
                 'x-ms-meta-myownprop': 'mytestprop',
-                'Content-Type': 'application/pdf'
+                'Content-Type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
               },
               body: fileBuffer
             });
 
             if (uploadRes.ok) {
-              console.log(`Successfully uploaded ${pdfPath} to blob URL ${i + 1}`);
+              console.log(`Successfully uploaded ${path.basename(filePath)} to blob URL ${i + 1}`);
             } else {
-              console.error(`Failed to upload ${pdfPath}:`, uploadRes.status, uploadRes.statusText);
+              console.error(`Failed to upload ${path.basename(filePath)}:`, uploadRes.status, uploadRes.statusText);
             }
           } catch (err) {
-            console.error(`Error uploading ${pdfPath}:`, err);
+            console.error(`Error uploading ${path.basename(filePath)}:`, err);
           }
         }
       }
