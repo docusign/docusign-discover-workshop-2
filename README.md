@@ -51,6 +51,8 @@ npm run dev
 
 # Bulk upload agreements using the Navigator API
 
+Endpoints detailed in [bulkUploadWithAPI.md](./bulkUploadWithAPI.md).
+
 * Open your .env file and update the variable BASE\_PATH to the value [api-d.docusign.com](http://api-d.docusign.com).
 
 ## Create bulk upload job
@@ -132,6 +134,8 @@ client.navigator.agreements.deleteAgreement({ accountId, agreementId });
 * The project has an [`auth.js`](./src/auth.js) file stubbed out for you to implement.
 
 # Create and Test Connect Webhooks
+
+Events detailed in [createWebhooks.md](./createWebhooks.md).
 
 1. Visit [https://apps-d.docusign.com/admin/connect/](https://apps-d.docusign.com/admin/connect/).
 
