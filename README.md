@@ -94,7 +94,9 @@ Replace this with the equivalent SDK call to Navigator:
 client.navigator.agreements.getAgreementsList({ accountId });
 ```
 
-[API reference](https://developers.docusign.com/docs/navigator-api/reference/navigator/agreements/getagreement/)
+[API reference](https://developers.docusign.com/docs/navigator-api/reference/navigator/agreements/getagreementslist/)
+
+[SDK Documentation](https://developers.docusign.com/docs/sdks/iam-typescript/)
 
 Restart your server and refresh the browser — you should now see **real agreements from your Docusign account**.
 
