@@ -2,13 +2,13 @@
 
 ## Navigator Webhook Events
 
-| Event                          | Trigger                                             |
-|--------------------------------|-----------------------------------------------------|
-| agreement-created              | a new agreement is created in Navigator             |
-| agreement-extractions-reviewed | the number of pending extraction reviews is reduced |
-| agreement-reviews-complete     | the number of pending extraction reviews reaches 0  |
-| agreement-updated              | a user manually modifies an agreement in Navigator  |
-| agreement-deleted              | an agreement is deleted in Navigator                |
+| Event                            | Trigger                                             |
+|----------------------------------|-----------------------------------------------------|
+| `agreement-created`              | a new agreement is created in Navigator             |
+| `agreement-extractions-reviewed` | the number of pending extraction reviews is reduced |
+| `agreement-reviews-complete`     | the number of pending extraction reviews reaches 0  |
+| `agreement-updated`              | a user manually modifies an agreement in Navigator  |
+| `agreement-deleted`              | an agreement is deleted in Navigator                |
 
 ## Creating Custom Configurations Using Navigator Events
 
