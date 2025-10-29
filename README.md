@@ -4,13 +4,20 @@ By the end of this lab you will have:
 
 * [Run the project with mock data (instant feedback).](#run-the-project-with-mock-data)
 
-* [Configured your own Docusign developer app.]()
+* [Used the Docusign AI assistant to create an IK and generate an access token.](#create-an-integration-key-and-obtain-an-access-token-using-the-vscode-docusign-ai-assistant)
 
-* [Called the Navigator API via SDK.](#get-agreements-using-the-navigator-sdk)
+* [Bulk uploaded agreement documents to Navigator using an API call.](#bulk-upload-agreements-using-the-navigator-api)
 
-* [Extended the project by implementing a delete operation.](#implement-delete-agreement-your-task)
+* [Used the IAM SDK to get navigator agreements.](#get-agreements-using-the-navigator-sdk)
 
-* [(Optional) Learned how to implement OAuth.](#add-oauth-optional-advanced)
+* [Used the IAM SDK to delete an agreement.](#implement-delete-agreement-your-task)
+
+* [(Optional) Learned how to implement OAuth with the IAM SDK.](#add-oauth-optional-advanced)
+
+* [Created and tested Connect webhooks for Navigator events.](#create-and-test-connect-webhooks)
+
+* [Made requests to the Docusign MCP server.](#connect-to-the-docusign-mcp-server)
+
 
 # Run the project with mock data
 
@@ -26,7 +33,9 @@ git clone https://github.com/docusign/docusign-discover-workshop-2.git
 npm install
 ```
 
-3. Start the server in development mode:  
+3. Copy the `example.env` file to a new file named `.env`.
+
+4. Start the server in development mode:  
    
 
 ```shell
@@ -40,7 +49,37 @@ npm run dev
 
 # Create an integration key and obtain an access token using the VSCode Docusign AI Assistant
 
-[Follow instructions here](/oauthWithAIAssistant.md)
+[Follow instructions here](./oauthWithAIAssistant.md)
+
+* Open your .env file and update the variable BASE\_PATH to the value [api-d.docusign.com](http://api-d.docusign.com).
+
+# Bulk upload agreements using the Navigator API
+
+Endpoints detailed in [bulkUploadWithAPI.md](./bulkUploadWithAPI.md).
+
+## Create bulk upload job
+
+1. The `try` statement includes an empty `body` constant. Add the following as the value of `body`:
+
+```json
+{
+  "job_name": "test_name",
+  "expected_number_of_docs": 2,
+  "language": "en_us"
+}
+```
+
+2. The `res` constant uses a `fetch` statement. Add the URL for the [create job endpoint](./bulkUploadWithAPI.md#bulk-upload-steps) as the first argument.
+
+3. The `completeRes` constant uses a `fetch` statement. Add the URL for the [complete job endpoint](./bulkUploadWithAPI.md#bulk-upload-steps) as the first argument.
+
+4. The `bulkUploadStatus` function makes a request to check the status of `jobId`. Complete the `statusCheck` constant with a fetch statement to the [check status endpoint](./bulkUploadWithAPI.md#check-bulk-upload-status) that includes `Authorization`, `Accept`, and `Content-Type` headers.
+
+5. Restart your server and refresh the browser — you should now see **real agreements from your Docusign account**.
+
+6. Click the **Bulk Upload** button. You should see a modal confirming successful upload of 2 agreements.
+
+7. Click the **Check Status** button. You should see a modal providing the status of the agreement upload and processing. Status should report complete after about 60 seconds.
 
 # Get agreements using the Navigator SDK
 
@@ -55,7 +94,9 @@ Replace this with the equivalent SDK call to Navigator:
 client.navigator.agreements.getAgreementsList({ accountId });
 ```
 
-[API reference](https://developers.docusign.com/docs/navigator-api/reference/navigator/agreements/getagreement/)
+[API reference](https://developers.docusign.com/docs/navigator-api/reference/navigator/agreements/getagreementslist/)
+
+[SDK Documentation](https://developers.docusign.com/docs/sdks/iam-typescript/)
 
 Restart your server and refresh the browser — you should now see **real agreements from your Docusign account**.
 
@@ -65,6 +106,18 @@ You can filter agreements by properties such as status, expiration date, party n
  the [API reference page.](https://developers.docusign.com/docs/navigator-api/reference/navigator/agreements/getagreementslist/)
 
 Try extending your SDK method calls with additional query parameters. Experiment with different combinations to see how you can sort and filter agreements in ways that match the requirements of various use cases.
+
+```javascript
+let options = {
+  accountId: accountId,
+  limit: 10,
+  "effective_date[gte]": "2015-01-01",
+  sort: "effective_date",
+  direction: "asc"
+};
+
+client.navigator.agreements.getAgreementsList( options );
+```
 
 # Implement “Delete Agreement” (your task)
 
@@ -96,3 +149,48 @@ client.navigator.agreements.deleteAgreement({ accountId, agreementId });
 
 * The project has an [`auth.js`](./src/auth.js) file stubbed out for you to implement.
 
+# Create and Test Connect Webhooks
+
+Events detailed in [createWebhooks.md](./createWebhooks.md).
+
+1. Visit [https://apps-d.docusign.com/admin/connect/](https://apps-d.docusign.com/admin/connect/).
+
+1. Click **Add Configuration** > **Custom**.
+
+1. In the Name box, type **Navigator API test** or another configuration name of your choosing.
+
+1. In a new tab, open [https://webhook.site](https://webhook.site), then click the generated URL to copy it.
+
+1. Return to your Custom Connect configuration, then in the **URL to Publish** box paste the URL you copied.
+
+1. In the Trigger Events section, open the Navigator list and check all 5 events.
+
+1. Click **Add Configuration**.
+
+1. In a new tab, open [https://apps-d.docusign.com/send/documents](https://apps-d.docusign.com/send/documents), then in the sidebar, click **Completed**.
+
+1. Click an agreement with the icon for AI suggestions (purple star), click **Review All**, approve one of the AI-suggested values, then click **Save**.
+
+1. On the webhook.site tab, review the **agreement-extractions-reviewed** message.
+
+1. In your open agreement, click **Review All**, approve all remaining AI-suggested values, then click **Save**.
+
+1. On the webhook.site tab, review the **agreement-reviews-complete** message.
+
+1. In your open agreement, click the edit icon (pencil), change a data value, then click **Save**.
+
+1. On the webhook.site tab, review the **agreement-updated** message.
+
+1. Return to your open agreement close it, in the agreements list click the vertical ellipsis (**&vellip;**) for the agreement, click **Remove**, then click **Remove Agreement.**
+
+1. On the webhook.site tab, review the **agreement-deleted** message.
+
+# Connect to the Docusign MCP server
+
+Check out the `discover-mcp-workshop` branch of this repo. You'll need to work in this branch to ensure clean context for the agent you're building.
+
+```shell
+git checkout discover-mcp-workshop
+```
+
+See [Docusign MCP Workshop: AI-Powered Agreement Analysis](https://github.com/docusign/docusign-discover-workshop-2/blob/discover-mcp-workshop/README.md) for your instructions.
