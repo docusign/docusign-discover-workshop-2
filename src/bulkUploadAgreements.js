@@ -43,7 +43,7 @@ export async function bulkUploadAgreements({ accessToken } = {}) {
 
     const body = {
       "job_name": "test_name",
-      "expected_number_of_docs": files.length,
+      "expected_number_of_docs": 50,
       "language": "en_us"
     };
     
@@ -139,6 +139,8 @@ export async function bulkUploadStatus({ jobId, accessToken } = {}) {
     });
 
     const statusC = await statusCheck.json();
+
+    console.log(JSON.stringify(statusC, null, 2));
 
   return {status: statusC.status}
 }
