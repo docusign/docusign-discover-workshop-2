@@ -10,7 +10,14 @@ export async function getAgreements({ accessToken } = {}) {
 
   let data;
   try {
-    data = await client.navigator.agreements.getAgreementsList({ accountId });
+    let options = {
+      accountId: accountId,
+      limit: 10,
+      "effective_date[gte]": "2015-01-01",
+      sort: "effective_date",
+      direction: "asc"
+    };
+    data = await client.navigator.agreements.getAgreementsList( options );
   } catch (err) {
     if (err?.message?.includes('Response validation failed') && err?.rawValue) {
       console.warn('getAgreements: response validation failed — using rawValue fallback');
