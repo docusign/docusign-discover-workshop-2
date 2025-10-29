@@ -12,7 +12,7 @@ POST to `https://{{host}}/v1/accounts/{{accountId}}/upload/jobs`, passing a JSON
 { 
   "job_name":"test_name",
   "expected_number_of_docs":1,
-  "culture_name":"en_us"
+  "language":"en_us"
 }
 ```
 
@@ -26,17 +26,7 @@ A successful response is a 201 with no data.
 
 **3. Complete the upload**
 
-POST to `https://{{host}}/v1/accounts/{{accountId}}/upload/jobs/{{jobId_int}}/actions/complete`, passing a JSON body:
-
-```json
-{ 
-  "job_name":"test_name",
-  "expected_number_of_docs":1,
-  "culture_name":"en_us"
-}
-```
-
-This is the same body as in Step 1, but this time the `expected_number_of_docs` value should correspond to the actual number of documents uploaded.
+POST to `https://{{host}}/v1/accounts/{{accountId}}/upload/jobs/{{jobId_int}}/actions/complete`.
 
 A successful response provides data about the job, including the status.
 

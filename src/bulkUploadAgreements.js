@@ -5,13 +5,11 @@ export async function bulkUploadAgreements({ accessToken } = {}) {
   const accountId = process.env.DS_ACCOUNT_ID;
   const baseUrl = process.env.BASE_URL; 
   try {
-    const body = {
-      "job_name": "test_name",
-      "expected_number_of_docs": 2,
-      "culture_name": "en_us"
-    };
+    // Step 1: Add a value for body:
+    const body = {};
     
-    const res = await fetch(`${baseUrl}/v1/accounts/${accountId}/upload/jobs`, {
+    // Step 2: Add the create job endpoint URL as the first fetch argument:
+    const res = await fetch(``, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -75,14 +73,14 @@ export async function bulkUploadAgreements({ accessToken } = {}) {
         }
       }
 
-      const completeRes = await fetch(`${baseUrl}/v1/accounts/${accountId}/upload/jobs/${jobId}/actions/complete`, {
+      // Step 3: Add the complete job endpoint URL as the first fetch argument:
+      const completeRes = await fetch(``, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${accessToken}`,
           'Accept': 'application/json',
           'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(body)
+        }
       });
 
     return {jobId: jobId, received: i};
@@ -101,14 +99,8 @@ export async function bulkUploadStatus({ jobId, accessToken } = {}) {
   const accountId = process.env.DS_ACCOUNT_ID;
   const baseUrl = process.env.BASE_URL;
 
-  const statusCheck = await fetch(`${baseUrl}/v1/accounts/${accountId}/upload/jobs/${jobId}`, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
-    });
+  // Step 4: Complete the statusCheck constant with a fetch statement to the check status endpoint:
+  const statusCheck = await fetch(); 
 
     const statusC = await statusCheck.json();
 
