@@ -189,4 +189,8 @@ Events detailed in [createWebhooks.md](./createWebhooks.md).
 
 Check out the `discover-mcp-workshop` branch of this repo. You'll need to work in this branch to ensure clean context for the agent you're building.
 
+```shell
+git checkout discover-mcp-workshop
+```
+
 See [Docusign MCP Workshop: AI-Powered Agreement Analysis](https://github.com/docusign/docusign-discover-workshop-2/blob/discover-mcp-workshop/README.md) for your instructions.
