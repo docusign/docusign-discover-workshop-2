@@ -4,9 +4,9 @@ By the end of this lab you will have:
 
 * [Run the project with mock data (instant feedback).](#run-the-project-with-mock-data)
 
-* [Used the Docusign AI assistant to create an IK and generate an access token.]()
+* [Used the Docusign AI assistant to create an IK and generate an access token.](#create-an-integration-key-and-obtain-an-access-token-using-the-vscode-docusign-ai-assistant)
 
-* [Bulk uploaded agreement documents to Navigator using an API call](#bulk-upload-agreements-using-the-navigator-api)
+* [Bulk uploaded agreement documents to Navigator using an API call.](#bulk-upload-agreements-using-the-navigator-api)
 
 * [Used the IAM SDK to get navigator agreements.](#get-agreements-using-the-navigator-sdk)
 
@@ -15,6 +15,8 @@ By the end of this lab you will have:
 * [(Optional) Learned how to implement OAuth with the IAM SDK.](#add-oauth-optional-advanced)
 
 * [Created and tested Connect webhooks for Navigator events.](#create-and-test-connect-webhooks)
+
+* [Made requests to the Docusign MCP server.](#connect-to-the-docusign-mcp-server)
 
 
 # Run the project with mock data
@@ -162,6 +164,7 @@ client.navigator.agreements.deleteAgreement({ accountId, agreementId });
 1. Return to your open agreement close it, in the agreements list click the vertical ellipsis (**&vellip;**) for the agreement, click **Remove**, then click **Remove Agreement.**
 
 1. On the webhook.site tab, review the **agreement-deleted** message.
+
 # Connect to the Docusign MCP server
 
 Check out the `discover-mcp-workshop` branch of this repo. You'll need to work in this branch to ensure clean context for the agent you're building.
