@@ -49,11 +49,16 @@ npm run dev
 
 [Follow instructions here](/oauthWithAIAssistant.md)
 
+* Open your .env file and update the variable BASE\_PATH to the value [api-d.docusign.com](http://api-d.docusign.com).
+
+
+* Restart your server and refresh the browser — you should now see **real agreements from your Docusign account**.
+
+
 # Bulk upload agreements using the Navigator API
 
 Endpoints detailed in [bulkUploadWithAPI.md](./bulkUploadWithAPI.md).
 
-* Open your .env file and update the variable BASE\_PATH to the value [api-d.docusign.com](http://api-d.docusign.com).
 
 ## Create bulk upload job
 
@@ -73,15 +78,11 @@ Endpoints detailed in [bulkUploadWithAPI.md](./bulkUploadWithAPI.md).
 
 4. The `bulkUploadStatus` function makes a request to check the status of `jobId`. Complete the `statusCheck` constant with a fetch statement to the [check status endpoint](./bulkUploadWithAPI.md#check-bulk-upload-status) that includes `Authorization`, `Accept`, and `Content-Type` headers.
 
-5. Restart your server and refresh the browser — you should now see **real agreements from your Docusign account**.
+5. Click the **Bulk Upload** button. You should see a modal confirming successful upload of 2 agreements.
 
-6. Click the **Bulk Upload** button. You should see a modal confirming successful upload of 2 agreements.
-
-7. Click the **Check Status** button. You should see a modal providing the status of the agreement upload and processing. Status should report complete after about 60 seconds.
+6. Click the **Check Status** button. You should see a modal providing the status of the agreement upload and processing. Status should report complete after about 60 seconds.
 
 # Get agreements using the Navigator SDK
-
-* Open your .env file and update the variable BASE\_PATH to the value [api-d.docusign.com](http://api-d.docusign.com)  
 
 The code currently fetches agreements using a REST API call.
 [`getAgreements.js`](./src/getAgreements.js)
@@ -94,7 +95,7 @@ client.navigator.agreements.getAgreementsList({ accountId });
 
 [API reference](https://developers.docusign.com/docs/navigator-api/reference/navigator/agreements/getagreement/)
 
-Restart your server and refresh the browser — you should now see **real agreements from your Docusign account**.
+Restart your server and refresh the browser.
 
 ## Implement agreement filtering (optional/advanced)
 
