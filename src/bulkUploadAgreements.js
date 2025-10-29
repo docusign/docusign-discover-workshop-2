@@ -1,6 +1,4 @@
-// Deletes a single agreement (with a simple safety rail).
-import { makeClient } from './client.js';
-
+// Uploads 2 agreements (in a hard coded folder).
 export async function bulkUploadAgreements({ accessToken } = {}) {
  
   console.log(`Bulk uploading agreements`);
@@ -10,7 +8,7 @@ export async function bulkUploadAgreements({ accessToken } = {}) {
     const body = {
       "job_name": "test_name",
       "expected_number_of_docs": 2,
-      "culture_name": "en_us"
+      "language": "en_us"
     };
     
     const res = await fetch(`${baseUrl}/v1/accounts/${accountId}/upload/jobs`, {
@@ -87,18 +85,7 @@ export async function bulkUploadAgreements({ accessToken } = {}) {
         body: JSON.stringify(body)
       });
 
-      const statusCheck = await fetch(`${baseUrl}/v1/accounts/${accountId}/upload/jobs/${jobId}`, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
-      });
-
-      const statusC = await statusCheck.json();
-
-    return {jobId: jobId, status: statusC.status, received: i};
+    return {jobId: jobId, received: i};
 
   }
 
