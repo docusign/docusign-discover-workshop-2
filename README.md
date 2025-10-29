@@ -62,7 +62,7 @@ npm run dev
   "job_name": "test_name",
   "expected_number_of_docs": 2,
   "language": "en_us"
-};
+}
 ```
 
 2. The `res` constant uses a `fetch` statement. Add the URL for the [create job endpoint](./bulkUploadWithAPI.md#bulk-upload-steps) as the first argument.
