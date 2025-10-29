@@ -33,7 +33,9 @@ git clone https://github.com/docusign/docusign-discover-workshop-2.git
 npm install
 ```
 
-3. Start the server in development mode:  
+3. Copy the `example.env` file to a new file named `.env`.
+
+4. Start the server in development mode:  
    
 
 ```shell
@@ -47,13 +49,13 @@ npm run dev
 
 # Create an integration key and obtain an access token using the VSCode Docusign AI Assistant
 
-[Follow instructions here](/oauthWithAIAssistant.md)
+[Follow instructions here](./oauthWithAIAssistant.md)
+
+* Open your .env file and update the variable BASE\_PATH to the value [api-d.docusign.com](http://api-d.docusign.com).
 
 # Bulk upload agreements using the Navigator API
 
 Endpoints detailed in [bulkUploadWithAPI.md](./bulkUploadWithAPI.md).
-
-* Open your .env file and update the variable BASE\_PATH to the value [api-d.docusign.com](http://api-d.docusign.com).
 
 ## Create bulk upload job
 
