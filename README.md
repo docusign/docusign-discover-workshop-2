@@ -98,6 +98,17 @@ client.navigator.agreements.getAgreementsList({ accountId });
 
 [SDK Documentation](https://developers.docusign.com/docs/sdks/iam-typescript/)
 
+**TIP** it is expected to get a response validation error from the SDK. Use the following workaround:
+
+```
+} catch (err) {
+    if (err?.message?.includes('Response validation failed') && err?.rawValue) {
+      console.warn('getAgreements: response validation failed — using rawValue fallback');
+      data = err.rawValue;
+    } else {
+    ...
+```
+
 Restart your server and refresh the browser — you should now see **real agreements from your Docusign account**.
 
 ## Implement agreement filtering (optional/advanced)
