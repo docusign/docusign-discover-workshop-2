@@ -35,13 +35,15 @@ export async function getAgreements({ accessToken } = {}) {
     const data = await res.json();
     
     const items = (data?.items ?? data?.data ?? []);
+    console.log(`Agreements fetched: ${JSON.stringify(items, null, 2)}`);
 
     // Normalize response shape
     return {
       items: items.map(a => ({
         agreementId: a.agreementId ?? a.id ?? '',
         name: a.name ?? a.title ?? '',
-        status: a.status ?? 'unknown',
+        status: a.review_status ?? 'unknown',
+        category: a.category ?? 'unknown',
         raw: a
       }))
     };
