@@ -33,7 +33,9 @@ git clone https://github.com/docusign/docusign-discover-workshop-2.git
 npm install
 ```
 
-3. Start the server in development mode:  
+3. Copy the `example.env` file to a new file named `.env`.
+
+4. Start the server in development mode:  
    
 
 ```shell
@@ -47,18 +49,13 @@ npm run dev
 
 # Create an integration key and obtain an access token using the VSCode Docusign AI Assistant
 
-[Follow instructions here](/oauthWithAIAssistant.md)
+[Follow instructions here](./oauthWithAIAssistant.md)
 
 * Open your .env file and update the variable BASE\_PATH to the value [api-d.docusign.com](http://api-d.docusign.com).
-
-
-* Restart your server and refresh the browser — you should now see **real agreements from your Docusign account**.
-
 
 # Bulk upload agreements using the Navigator API
 
 Endpoints detailed in [bulkUploadWithAPI.md](./bulkUploadWithAPI.md).
-
 
 ## Create bulk upload job
 
@@ -93,7 +90,9 @@ Replace this with the equivalent SDK call to Navigator:
 client.navigator.agreements.getAgreementsList({ accountId });
 ```
 
-[API reference](https://developers.docusign.com/docs/navigator-api/reference/navigator/agreements/getagreement/)
+[API reference](https://developers.docusign.com/docs/navigator-api/reference/navigator/agreements/getagreementslist/)
+
+[SDK Documentation](https://developers.docusign.com/docs/sdks/iam-typescript/)
 
 Restart your server and refresh the browser.
 
@@ -103,6 +102,18 @@ You can filter agreements by properties such as status, expiration date, party n
  the [API reference page.](https://developers.docusign.com/docs/navigator-api/reference/navigator/agreements/getagreementslist/)
 
 Try extending your SDK method calls with additional query parameters. Experiment with different combinations to see how you can sort and filter agreements in ways that match the requirements of various use cases.
+
+```javascript
+let options = {
+  accountId: accountId,
+  limit: 10,
+  "effective_date[gte]": "2015-01-01",
+  sort: "effective_date",
+  direction: "asc"
+};
+
+client.navigator.agreements.getAgreementsList( options );
+```
 
 # Implement “Delete Agreement” (your task)
 
@@ -173,6 +184,10 @@ Events detailed in [createWebhooks.md](./createWebhooks.md).
 # Connect to the Docusign MCP server
 
 Check out the `discover-mcp-workshop` branch of this repo. You'll need to work in this branch to ensure clean context for the agent you're building.
+
+```shell
+git checkout discover-mcp-workshop
+```
 
 See [Docusign MCP Workshop: AI-Powered Agreement Analysis](https://github.com/docusign/docusign-discover-workshop-2/blob/discover-mcp-workshop/README.md) for your instructions.
 

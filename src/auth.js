@@ -14,6 +14,8 @@ function buildAuthUrl({
   scopes = [
     "adm_store_unified_repo_read",
     "adm_store_unified_repo_write",
+    "document_uploader_write",
+    "document_uploader_read",
     "aow_manage",
     "signature"
   ], 

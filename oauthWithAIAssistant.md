@@ -20,22 +20,28 @@ Go to the Agreements tab and click completed to confirm that you have access. Yo
 
    <img src="./images/image4.png" width="500">
 
-8. Open the consent url in your browser and grant consent to the listed scopes.
+8. Open the consent url and add the following scopes to the url:
+
+```
+%20adm_store_unified_repo_write%20document_uploader_write%20document_uploader_read
+```
+
+9. Reload the updated url and grant consent to the listed scopes.
 
    <img src="./images/image5.png" width="500">  
 
-9. After granting consent, copy the redirect URI.
+10. After granting consent, copy the redirect URI.
 
    <img src="./images/image6.png" width="500"> 
 
-10. Paste the URI into VSCode.
+11. Paste the URI into VSCode.
 
    <img src="./images/image7.png" width="500"> 
 
    <img src="./images/image8.png" width="500"> 
 
    It should also display your user info, and an example curl request using the access token.  
-8. Copy the generated integration key, integration secret, and access token to your .env file as values to the respective environment variables DS\_CLIENT\_ID, DS\_SECRET\_KEY, and DS\_ACCESS\_TOKEN. Copy the account id from the displayed user info to the env variable DS\_ACCOUNT\_ID.  
+12. Copy the generated integration key, integration secret, and access token to your .env file as values to the respective environment variables DS\_CLIENT\_ID, DS\_SECRET\_KEY, and DS\_ACCESS\_TOKEN. Copy the account id from the displayed user info to the env variable DS\_ACCOUNT\_ID.  
    
    <img src="./images/image9.png" width="500"> 
 

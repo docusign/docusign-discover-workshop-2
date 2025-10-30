@@ -133,5 +133,7 @@ export async function bulkUploadStatus({ jobId, accessToken } = {}) {
 
     const statusC = await statusCheck.json();
 
+    console.log(JSON.stringify(statusC, null, 2));
+
   return {status: statusC.status}
 }
