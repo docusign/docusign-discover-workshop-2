@@ -96,7 +96,7 @@ client.navigator.agreements.getAgreementsList({ accountId });
 
 **TIP** it is expected to get a response validation error from the SDK. Use the following workaround:
 
-```
+```javascript
 } catch (err) {
     if (err?.message?.includes('Response validation failed') && err?.rawValue) {
       console.warn('getAgreements: response validation failed — using rawValue fallback');
