@@ -42,6 +42,8 @@ export async function getAgreements({ accessToken } = {}) {
   const items = list.map(a => ({
     agreementId: a.agreementId ?? a.id ?? a.agreement_id ?? '',
     name: a.title ?? a.name ?? a.file_name ?? '',
+    status: a.review_status ?? 'unknown',
+    category: a.category ?? 'unknown',
     raw: a
   }));
   // console.log(`ITEMS: ${JSON.stringify(items)}`);
