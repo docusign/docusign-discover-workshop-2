@@ -6,15 +6,15 @@ By the end of this lab you will have:
 
 * [Used the Docusign AI assistant to create an IK and generate an access token.](#create-an-integration-key-and-obtain-an-access-token-using-the-vscode-docusign-ai-assistant)
 
-* [Bulk uploaded agreement documents to Navigator using an API call.](#bulk-upload-agreements-using-the-navigator-api)
+* [Bulk uploaded agreement documents to Agreement Manager using an API call.](#bulk-upload-agreements-using-the-agreement-manager-api)
 
-* [Used the IAM SDK to get navigator agreements.](#get-agreements-using-the-navigator-sdk)
+* [Used the IAM SDK to get Agreement Manager agreements.](#get-agreements-using-the-agreement-manager-sdk)
 
 * [Used the IAM SDK to delete an agreement.](#implement-delete-agreement-your-task)
 
 * [(Optional) Learned how to implement OAuth with the IAM SDK.](#add-oauth-optional-advanced)
 
-* [Created and tested Connect webhooks for Navigator events.](#create-and-test-connect-webhooks)
+* [Created and tested Connect webhooks for Agreement Manager events.](#create-and-test-connect-webhooks)
 
 * [Made requests to the Docusign MCP server.](#connect-to-the-docusign-mcp-server)
 
@@ -53,7 +53,7 @@ npm run dev
 
 * Open your .env file and update the variable BASE\_PATH to the value [api-d.docusign.com](http://api-d.docusign.com).
 
-# Bulk upload agreements using the Navigator API
+# Bulk upload agreements using the Agreement Manager API
 
 Endpoints detailed in [bulkUploadWithAPI.md](./bulkUploadWithAPI.md).
 
@@ -79,12 +79,12 @@ Endpoints detailed in [bulkUploadWithAPI.md](./bulkUploadWithAPI.md).
 
 6. Click the **Check Status** button. You should see a modal providing the status of the agreement upload and processing. Status should report complete after about 60 seconds.
 
-# Get agreements using the Navigator SDK
+# Get agreements using the Agreement Manager SDK
 
 The code currently fetches agreements using a REST API call.
 [`getAgreements.js`](./src/getAgreements.js)
 
-Replace this with the equivalent SDK call to Navigator:
+Replace this with the equivalent SDK call to Agreement Manager:
 
 ```javascript
 client.navigator.agreements.getAgreementsList({ accountId });
@@ -164,13 +164,13 @@ Events detailed in [createWebhooks.md](./createWebhooks.md).
 
 1. Click **Add Configuration** > **Custom**.
 
-1. In the Name box, type **Navigator API test** or another configuration name of your choosing.
+1. In the Name box, type **Agreement Manager API test** or another configuration name of your choosing.
 
 1. In a new tab, open [https://webhook.site](https://webhook.site), then click the generated URL to copy it.
 
 1. Return to your Custom Connect configuration, then in the **URL to Publish** box paste the URL you copied.
 
-1. In the Trigger Events section, open the Navigator list and check all 5 events.
+1. In the Trigger Events section, open the Agreement Manager list and check all 5 events.
 
 1. Click **Add Configuration**.
 

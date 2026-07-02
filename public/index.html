@@ -2,19 +2,145 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>Navigator Mini Dashboard</title>
+  <title>Agreement Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    :root { font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; }
-    body { margin: 24px; }
-    header { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-    input, button { padding: 8px 10px; font-size: 14px; }
-    table { width: 100%; border-collapse: collapse; margin-top: 16px; }
-    th, td { text-align: left; padding: 10px; border-bottom: 1px solid #eee; }
-    tr:hover { background: #fafafa; }
-    .danger { border: 1px solid #d33; color: #d33; background: #fff; border-radius: 6px; cursor: pointer; }
-    .pill { padding: 2px 8px; border-radius: 999px; background: #eee; font-size: 12px; }
-    .muted { color: #666; font-size: 12px; }
+    :root {
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --border: #2a2d3a;
+      --text: #e4e4e7;
+      --text-muted: #71717a;
+      --accent: #6366f1;
+      --accent-hover: #818cf8;
+      --danger: #ef4444;
+      --danger-hover: #dc2626;
+      --pill-bg: #27272a;
+      --pill-text: #a1a1aa;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 32px 40px; background: var(--bg); color: var(--text); min-height: 100vh; }
+    header { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
+    h2 { margin: 0; font-size: 22px; font-weight: 600; letter-spacing: -0.3px; }
+    button {
+      padding: 8px 16px; font-size: 13px; font-weight: 500; border: 1px solid var(--border);
+      background: var(--surface); color: var(--text); border-radius: 8px; cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    button:hover { border-color: var(--accent); color: var(--accent-hover); }
+    table { width: 100%; border-collapse: collapse; }
+    th {
+      text-align: left; padding: 12px 16px; font-size: 11px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+    }
+    td { padding: 14px 16px; border-bottom: 1px solid var(--border); font-size: 14px; }
+    tr:hover { background: var(--surface); }
+    .danger {
+      border: 1px solid var(--danger); color: var(--danger); background: transparent;
+      border-radius: 6px; cursor: pointer; padding: 6px 12px; font-size: 12px;
+    }
+    .danger:hover { background: var(--danger); color: #fff; border-color: var(--danger-hover); }
+    .pill {
+      padding: 4px 10px; border-radius: 999px; background: var(--pill-bg);
+      color: var(--pill-text); font-size: 12px; font-weight: 500;
+    }
+    .muted { color: var(--text-muted); font-size: 12px; }
+
+    /* Button loading states */
+    .btn-loading {
+      pointer-events: none; opacity: 0.7; position: relative;
+      padding-left: 30px;
+    }
+    .btn-loading::before {
+      content: ''; position: absolute; left: 10px; top: 50%; margin-top: -6px;
+      width: 12px; height: 12px; border: 2px solid var(--accent);
+      border-top-color: transparent; border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Activity log panel */
+    #activity-log {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+      padding: 16px 20px; margin-bottom: 24px;
+    }
+    #activity-log h3 {
+      margin: 0 0 12px; font-size: 12px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted);
+    }
+    .log-header {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
+    }
+    .log-method {
+      font-weight: 700; font-size: 11px; padding: 3px 10px; border-radius: 4px;
+      text-transform: uppercase; font-family: monospace;
+    }
+    .log-method.get { background: #1e3a5f; color: #60a5fa; }
+    .log-method.post { background: #1a3d2e; color: #4ade80; }
+    .log-method.delete { background: #3b1c1c; color: #f87171; }
+    .log-url {
+      color: var(--text); font-family: monospace; font-size: 13px;
+      word-break: break-all; flex: 1;
+    }
+    .log-timer { color: var(--text-muted); font-size: 12px; font-family: monospace; }
+    .log-badge {
+      font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 4px;
+    }
+    .log-badge.success { background: #1a3d2e; color: #4ade80; }
+    .log-badge.error { background: #3b1c1c; color: #f87171; }
+    .log-badge.pending { background: #2a2d3a; color: #a1a1aa; }
+    .log-body {
+      background: var(--bg); border: 1px solid var(--border); border-radius: 6px;
+      padding: 10px 14px; margin-top: 8px; font-family: monospace; font-size: 12px;
+      color: var(--text-muted); white-space: pre-wrap; word-break: break-all;
+      max-height: 120px; overflow-y: auto;
+    }
+    .log-body-label {
+      font-size: 11px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.4px; color: var(--text-muted); margin-top: 10px; margin-bottom: 4px;
+    }
+    #activity-log.active {
+      border-color: var(--accent);
+      animation: pulseGlow 1.5s ease infinite;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(99,102,241,0); }
+      50% { box-shadow: 0 0 12px 2px rgba(99,102,241,0.25); }
+    }
+    .log-empty { color: var(--text-muted); font-size: 13px; font-style: italic; }
+
+    /* Clickable rows */
+    tr[data-clickable] { cursor: pointer; }
+    tr[data-clickable]:hover { background: rgba(99,102,241,0.08); }
+    tr.selected { background: rgba(99,102,241,0.12); }
+
+    /* Inline detail row */
+    .detail-row td {
+      padding: 0; border-bottom: 1px solid var(--border);
+    }
+    .detail-row:hover { background: transparent; }
+    .detail-inner {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+      padding: 16px 20px; margin: 8px 16px 14px;
+    }
+    .detail-inner h4 {
+      margin: 0 0 10px; font-size: 13px; font-weight: 600; color: var(--text);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .detail-inner .close-btn {
+      margin-left: auto; padding: 3px 8px; font-size: 11px;
+      border: 1px solid var(--border); background: var(--bg); color: var(--text-muted);
+      border-radius: 4px; cursor: pointer;
+    }
+    .detail-inner .close-btn:hover { border-color: var(--accent); color: var(--text); }
+    .detail-json {
+      background: var(--bg); border: 1px solid var(--border); border-radius: 6px;
+      padding: 12px 14px; font-family: monospace; font-size: 12px;
+      color: var(--text-muted); white-space: pre-wrap; word-break: break-all;
+      max-height: 260px; overflow-y: auto;
+    }
   </style>
 </head>
 <body>
@@ -26,6 +152,11 @@
     <button id="checkStatus">Check Status</button>
     <span class="muted" id="count"></span>
   </header>
+
+  <div id="activity-log">
+    <h3>API Activity</h3>
+    <div id="log-content"><span class="log-empty">No API calls yet</span></div>
+  </div>
 
   <table id="grid" aria-label="Agreements">
     <thead>
@@ -45,10 +176,105 @@
     const $count = document.getElementById('count');
     const $refresh = document.getElementById('refresh');
     const $bulkUpload = document.getElementById('bulkUpload');
+    const $checkStatus = document.getElementById('checkStatus');
+    const $activityLog = document.getElementById('activity-log');
+    const $logContent = document.getElementById('log-content');
 
+    function closeDetailRow() {
+      document.querySelector('tr.detail-row')?.remove();
+      document.querySelector('tr.selected')?.classList.remove('selected');
+    }
+
+    // --- Tracked fetch helper (shows most recent call only) ---
+    async function trackedFetch(method, url, { button, body, headers } = {}) {
+      const originalText = button ? button.textContent : '';
+      if (button) {
+        button.classList.add('btn-loading');
+        button.textContent = method + ' ' + url;
+      }
+
+      $activityLog.classList.add('active');
+      $logContent.innerHTML = `
+        <div class="log-header">
+          <span class="log-method ${method.toLowerCase()}">${method}</span>
+          <span class="log-url">Resolving upstream endpoint...</span>
+          <span class="log-timer">0.0s</span>
+          <span class="log-badge pending">in flight</span>
+        </div>
+      `;
+
+      const timerEl = $logContent.querySelector('.log-timer');
+      const badgeEl = $logContent.querySelector('.log-badge');
+      const urlEl = $logContent.querySelector('.log-url');
+      const start = performance.now();
+      const interval = setInterval(() => {
+        timerEl.textContent = ((performance.now() - start) / 1000).toFixed(1) + 's';
+      }, 100);
+
+      try {
+        const opts = { method };
+        if (headers) opts.headers = headers;
+        if (body) opts.body = body;
+        if (method === 'POST' && !headers) opts.headers = { 'Content-Type': 'application/json' };
+
+        const r = await fetch(url, opts);
+        clearInterval(interval);
+        timerEl.textContent = ((performance.now() - start) / 1000).toFixed(1) + 's';
+        $activityLog.classList.remove('active');
+
+        const responseBody = await r.json().catch(() => ({}));
+
+        if (r.ok) {
+          badgeEl.textContent = r.status + ' OK';
+          badgeEl.className = 'log-badge success';
+        } else {
+          badgeEl.textContent = r.status + ' ' + r.statusText;
+          badgeEl.className = 'log-badge error';
+        }
+
+        // Show upstream details from response metadata
+        const upstream = responseBody._upstream;
+        if (upstream) {
+          urlEl.textContent = upstream.url;
+          if (upstream.body) {
+            const bodyHtml = `
+              <div class="log-body-label">Request Body</div>
+              <div class="log-body">${escapeHtml(JSON.stringify(upstream.body, null, 2))}</div>
+            `;
+            $logContent.insertAdjacentHTML('beforeend', bodyHtml);
+          }
+        } else {
+          urlEl.textContent = url;
+        }
+
+        if (button) {
+          button.classList.remove('btn-loading');
+          button.textContent = originalText;
+        }
+        return { response: r, body: responseBody };
+      } catch (err) {
+        clearInterval(interval);
+        timerEl.textContent = ((performance.now() - start) / 1000).toFixed(1) + 's';
+        badgeEl.textContent = 'Network Error';
+        badgeEl.className = 'log-badge error';
+        urlEl.textContent = url;
+        $activityLog.classList.remove('active');
+        if (button) {
+          button.classList.remove('btn-loading');
+          button.textContent = originalText;
+        }
+        throw err;
+      }
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    // --- Load agreements ---
     async function load() {
-      const r = await fetch('/api/getAgreements');
-      const { items = [] } = await r.json();
+      const { body } = await trackedFetch('GET', '/api/getAgreements', { button: $refresh });
+      const { items = [] } = body;
       render(items);
     }
 
@@ -70,15 +296,57 @@
           </td>
         `;
 
+        tr.setAttribute('data-clickable', '');
+        tr.addEventListener('click', async (e) => {
+          if (e.target.closest('button')) return;
+          const id = a.agreementId;
+          if (!id) return;
+
+          closeDetailRow();
+          tr.classList.add('selected');
+
+          const detailTr = document.createElement('tr');
+          detailTr.className = 'detail-row';
+          detailTr.innerHTML = `<td colspan="5">
+            <div class="detail-inner">
+              <h4><span class="detail-title">Loading: ${escapeHtml(a.name || id)}</span><button class="close-btn">Close</button></h4>
+              <div class="detail-json">Fetching...</div>
+            </div>
+          </td>`;
+          tr.after(detailTr);
+
+          detailTr.querySelector('.close-btn').addEventListener('click', closeDetailRow);
+
+          const titleEl = detailTr.querySelector('.detail-title');
+          const jsonEl = detailTr.querySelector('.detail-json');
+
+          try {
+            const { response, body } = await trackedFetch('GET', '/api/getAgreement/' + encodeURIComponent(id));
+            if (!response.ok) {
+              jsonEl.textContent = 'Error: ' + (body.error || response.statusText);
+              return;
+            }
+            const { _upstream, ...details } = body;
+            titleEl.textContent = details.name || a.name || id;
+            jsonEl.textContent = JSON.stringify(details, null, 2);
+          } catch (err) {
+            jsonEl.textContent = 'Error: ' + err.message;
+          }
+        });
+
         const delBtn = tr.querySelector('button.danger');
-        delBtn?.addEventListener('click', async () => {
+        delBtn?.addEventListener('click', async (e) => {
+          e.stopPropagation();
           const id = a.agreementId;
           const typed = prompt('Type YES to confirm deletion:');
           if ((typed || '').toLowerCase() !== 'yes') return;
-          const r = await fetch('/api/deleteAgreement/' + encodeURIComponent(id), { method: 'DELETE' });
-          const body = await r.json().catch(() => ({}));
-          if (!r.ok) { alert('Delete failed: ' + (body.error || r.statusText)); return; }
-          load();
+          try {
+            const { response, body } = await trackedFetch('DELETE', '/api/deleteAgreement/' + encodeURIComponent(id), { button: delBtn });
+            if (!response.ok) { alert('Delete failed: ' + (body.error || response.statusText)); return; }
+            load();
+          } catch (err) {
+            alert('Delete error: ' + err.message);
+          }
         });
 
         $rows.appendChild(tr);
@@ -87,17 +355,11 @@
 
     $refresh.addEventListener('click', load);
 
-
-    document.getElementById('bulkUpload')?.addEventListener('click', async () => {
+    $bulkUpload.addEventListener('click', async () => {
       try {
-        const r = await fetch('/api/bulkUploadAgreements', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-        });
-        
-        const body = await r.json().catch(() => ({}));
-        if (!r.ok) {
-          alert('Bulk upload failed: ' + (body.error || r.statusText));
+        const { response, body } = await trackedFetch('POST', '/api/bulkUploadAgreements', { button: $bulkUpload });
+        if (!response.ok) {
+          alert('Bulk upload failed: ' + (body.error || response.statusText));
           return;
         }
         alert('Bulk upload complete: ' + (body.received ?? 0) + ' processed.');
@@ -107,16 +369,11 @@
       }
     });
 
-    document.getElementById('checkStatus')?.addEventListener('click', async () => {
+    $checkStatus.addEventListener('click', async () => {
       try {
-        const r = await fetch('/api/bulkUploadStatus', {
-          method: 'GET',
-          headers: { 'Accept': 'application/json' }
-        });
-        
-        const body = await r.json().catch(() => ({}));
-        if (!r.ok) {
-          alert('Status check failed: ' + (body.error || r.statusText));
+        const { response, body } = await trackedFetch('GET', '/api/bulkUploadStatus', { button: $checkStatus, headers: { 'Accept': 'application/json' } });
+        if (!response.ok) {
+          alert('Status check failed: ' + (body.error || response.statusText));
           return;
         }
         alert('Upload Status: ' + (body.status || 'unknown'));
@@ -129,7 +386,7 @@
     document.getElementById('loginBtn')?.addEventListener('click', () => {
       window.location.href = '/auth/login';
     });
-    
+
     load();
   </script>
 </body>

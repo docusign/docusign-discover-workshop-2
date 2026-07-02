@@ -4,6 +4,7 @@ import morgan from 'morgan';
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
 import { getAgreements } from './src/getAgreements.js';
+import { getAgreement } from './src/getAgreement.js';
 import { deleteAgreement } from './src/deleteAgreement.js';
 import { bulkUploadAgreements, bulkUploadStatus } from './src/bulkUploadAgreements.js';
 import { buildAuthUrl, exchangeCodeForToken } from './src/auth.js';
@@ -40,9 +41,15 @@ function requireAuth(req, res, next) {
 // Protected API routes
 app.get('/api/getAgreements', requireAuth, async (req, res) => {
   try {
-    const data = await getAgreements({ 
-      accessToken: req.session.accessToken 
+    const data = await getAgreements({
+      accessToken: req.session.accessToken
     });
+    const accountId = process.env.DS_ACCOUNT_ID;
+    data._upstream = {
+      method: 'GET',
+      url: `${process.env.BASE_URL}/v1/accounts/${accountId}/agreements`,
+      body: null
+    };
     res.json(data);
   } catch (e) {
     console.error(e);
@@ -50,15 +57,41 @@ app.get('/api/getAgreements', requireAuth, async (req, res) => {
   }
 });
 
+app.get('/api/getAgreement/:agreementId', requireAuth, async (req, res) => {
+  try {
+    const { agreementId } = req.params;
+    const data = await getAgreement({
+      agreementId,
+      accessToken: req.session.accessToken
+    });
+    const accountId = process.env.DS_ACCOUNT_ID;
+    data._upstream = {
+      method: 'GET',
+      url: `${process.env.BASE_URL}/v1/accounts/${accountId}/agreements/${agreementId}`,
+      body: null
+    };
+    res.json(data);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: e.message || 'Failed to fetch agreement' });
+  }
+});
+
 app.delete('/api/deleteAgreement/:agreementId', requireAuth, async (req, res) => {
   try {
     const { agreementId } = req.params;
     const force = req.query.force === 'true';
-    const result = await deleteAgreement({ 
-      agreementId, 
-      force, 
-      accessToken: req.session.accessToken 
+    const result = await deleteAgreement({
+      agreementId,
+      force,
+      accessToken: req.session.accessToken
     });
+    const accountId = process.env.DS_ACCOUNT_ID;
+    result._upstream = {
+      method: 'DELETE',
+      url: `${process.env.BASE_URL}/v1/accounts/${accountId}/agreements/${agreementId}`,
+      body: null
+    };
     res.json(result);
   } catch (e) {
     const status = e.code === 'SAFE_GUARD' ? 400 : 500;
@@ -66,7 +99,7 @@ app.delete('/api/deleteAgreement/:agreementId', requireAuth, async (req, res) =>
   }
 });
 
-// Bulk upload agreements 
+// Bulk upload agreements
 app.post('/api/bulkUploadAgreements', requireAuth, express.json(), async (req, res) => {
   try {
     const result = await bulkUploadAgreements({
@@ -78,6 +111,13 @@ app.post('/api/bulkUploadAgreements', requireAuth, express.json(), async (req, r
       req.session.jobId = result.jobId;
     }
 
+    const accountId = process.env.DS_ACCOUNT_ID;
+    const uploadBody = { documents: [{ name: '*.docx files from demo_agreements/' }] };
+    result._upstream = {
+      method: 'POST',
+      url: `${process.env.BASE_URL}/v1/accounts/${accountId}/agreements/bulk-import`,
+      body: uploadBody
+    };
     res.json(result);
   } catch (e) {
     console.error('bulk upload failed', e);
@@ -95,6 +135,12 @@ app.get('/api/bulkUploadStatus', requireAuth, async (req, res) => {
 
     const status = await bulkUploadStatus({ jobId, accessToken: req.session.accessToken });
 
+    const accountId = process.env.DS_ACCOUNT_ID;
+    status._upstream = {
+      method: 'GET',
+      url: `${process.env.BASE_URL}/v1/accounts/${accountId}/agreements/bulk-import/${jobId}`,
+      body: null
+    };
     res.json(status);
   } catch (e) {
     console.error('bulk upload status check failed', e);
@@ -144,5 +190,5 @@ app.post('/auth/logout', (req, res) => {
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
-  console.log(`Navigator mini dashboard at http://localhost:${port}`);
+  console.log(`Agreement Manager dashboard at http://localhost:${port}`);
 });

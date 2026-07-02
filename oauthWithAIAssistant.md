@@ -1,6 +1,6 @@
-# Log into your Docusign account with Navigator access
+# Log into your Docusign account with Agreement Manager access
 
-Go to [apps-d.docusign.com](http://apps-d.docusign.com) and sign in with your developer account with Navigator access.  
+Go to [apps-d.docusign.com](http://apps-d.docusign.com) and sign in with your developer account with Agreement Manager access.  
 Go to the Agreements tab and click completed to confirm that you have access. You should see a tag that says AI assisted.
 
 # Obtain an access token Using the Docusign Developer AI Assistant for VS Code
@@ -9,7 +9,7 @@ Go to the Agreements tab and click completed to confirm that you have access. Yo
 2. Install the Docusign Developer AI Assistance for VS Code extension in VS Code extensions marketplace:  
    <img src="./images/image1.png" width="700">
 3. Open GitHub Copilot by clicking on the Copilot icon in the Activity Bar or using the shortcut (Ctrl+Alt+P or Cmd+Alt+P on macOS).  
-4. Add the AI assistant as a participant in the chat using the command @docusign and sign in with your Docusign developer account (with Navigator access).  
+4. Add the AI assistant as a participant in the chat using the command @docusign and sign in with your Docusign developer account (with Agreement Manager access).  
    <img src="./images/image2.png" width="500">  
 5. Copy the example.env file from the root of the project directory and save it to a new file named .env. This is where you will save your authentication information from the following steps.  
 6. Enter  @docusign /getAccessToken and answer the follow the prompts to create and configure an integration key and generate an access token.  

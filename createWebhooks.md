@@ -1,16 +1,16 @@
-# Create Webhooks for Navigator Events
+# Create Webhooks for Agreement Manager Events
 
-## Navigator Webhook Events
+## Agreement Manager Webhook Events
 
 | Event                            | Trigger                                             |
 |----------------------------------|-----------------------------------------------------|
-| `agreement-created`              | a new agreement is created in Navigator             |
+| `agreement-created`              | a new agreement is created in Agreement Manager             |
 | `agreement-extractions-reviewed` | the number of pending extraction reviews is reduced |
 | `agreement-reviews-complete`     | the number of pending extraction reviews reaches 0  |
-| `agreement-updated`              | a user manually modifies an agreement in Navigator  |
-| `agreement-deleted`              | an agreement is deleted in Navigator                |
+| `agreement-updated`              | a user manually modifies an agreement in Agreement Manager  |
+| `agreement-deleted`              | an agreement is deleted in Agreement Manager                |
 
-## Creating Custom Configurations Using Navigator Events
+## Creating Custom Configurations Using Agreement Manager Events
 
 These events are available only for custom Connect configurations created using the **JSON SIM** event model message format.
 

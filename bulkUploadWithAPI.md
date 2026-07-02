@@ -1,4 +1,4 @@
-# Bulk Upload using the Navigator API
+# Bulk Upload using the Agreement Manager API
 
 ## Bulk Upload Steps
 
