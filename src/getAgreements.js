@@ -11,7 +11,8 @@ export async function getAgreements({ accessToken } = {}) {
   const baseUrl = process.env.BASE_URL; 
 
   try {
-    const res = await fetch(`${baseUrl}/v1/accounts/${accountId}/agreements`, {
+    const requestUrl = `${baseUrl}/v1/accounts/${accountId}/agreements`;
+    const res = await fetch(requestUrl, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -33,12 +34,12 @@ export async function getAgreements({ accessToken } = {}) {
     }
 
     const data = await res.json();
-    
+
     const items = (data?.items ?? data?.data ?? []);
     console.log(`Agreements fetched: ${JSON.stringify(items, null, 2)}`);
 
-    // Normalize response shape
     return {
+      requestUrl,
       items: items.map(a => ({
         agreementId: a.agreementId ?? a.id ?? '',
         name: a.name ?? a.title ?? '',

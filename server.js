@@ -44,12 +44,12 @@ app.get('/api/getAgreements', requireAuth, async (req, res) => {
     const data = await getAgreements({
       accessToken: req.session.accessToken
     });
-    const accountId = process.env.DS_ACCOUNT_ID;
     data._upstream = {
       method: 'GET',
-      url: `${process.env.BASE_URL}/v1/accounts/${accountId}/agreements`,
+      url: data.requestUrl,
       body: null
     };
+    delete data.requestUrl;
     res.json(data);
   } catch (e) {
     console.error(e);
@@ -189,6 +189,9 @@ app.post('/auth/logout', (req, res) => {
 });
 
 const port = process.env.PORT || 3000;
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Agreement Manager dashboard at http://localhost:${port}`);
 });
+
+process.on('SIGTERM', () => server.close());
+process.on('SIGINT', () => server.close());
